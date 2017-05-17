@@ -1,8 +1,8 @@
 {
   "name": "react-scrollbar-ie8",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "React scrollbars component",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "files": [
     "lib"
   ],
