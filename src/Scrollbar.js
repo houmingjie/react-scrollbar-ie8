@@ -1,5 +1,5 @@
 import React, { Component, PropTypes,cloneElement } from 'react'
-// import './scrollbar.css'
+import './scrollbar.css'
 import css from 'dom-css';
 import {getInnerHeight,getInnerWidth,addListener, removeListener} from './util'
 

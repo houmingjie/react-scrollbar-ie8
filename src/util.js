@@ -27,7 +27,7 @@ const isSupport = !!document.addEventListener;
  */
 
 /*** addEventlistener ***/
-const addListener = (()=>{
+export const addListener = (()=>{
     if(isSupport){
         /* ie9以上正常使用addEventListener */
         return function(element, type, fun, useCapture){
@@ -64,7 +64,7 @@ const addListener = (()=>{
 })();
 
 /*** removeEventlistener ***/
-const removeListener = (()=>{
+export const removeListener = (()=>{
     if(isSupport){
         /* ie9以上正常使用removeEventListener */
         return function(element, type, fun){
