@@ -1,8 +1,7 @@
 import React, { Component, PropTypes,cloneElement } from 'react'
-import './scrollbar.css'
+// import './scrollbar.css'
 import css from 'dom-css';
-import {getInnerHeight,getInnerWidth} from './util'
-import {addListener, removeListener} from 'lib/eventListener'
+import {getInnerHeight,getInnerWidth,addListener, removeListener} from './util'
 
 const returnFalse = function () {
     return false;
