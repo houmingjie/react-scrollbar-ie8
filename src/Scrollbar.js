@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import './scrollbar.css';
 import css from 'dom-css';
+import './scrollbar.css';
 import { getInnerHeight, getInnerWidth, addListener, removeListener } from './util';
 
 function returnFalse() {
@@ -16,18 +16,18 @@ const disableSelectStyleReset = {
 };
 
 function getScrollbarSize() {
-        const outer = document.createElement('div');
-        document.body.appendChild(outer);
-        const outerStyle = outer.style;
-        outerStyle.position = 'absolute';
-        outerStyle.width = '100px';
-        outerStyle.height = '100px';
-        outerStyle.overflow = 'scroll';
-        outerStyle.top = '-99999px';
-        const scrollbarWidth = outer.offsetWidth - outer.clientWidth;
-        const scrollbarHeight = outer.offsetHeight - outer.clientHeight;
-        document.body.removeChild(outer);
-        return { scrollbarWidth, scrollbarHeight };
+    const outer = document.createElement('div');
+    document.body.appendChild(outer);
+    const outerStyle = outer.style;
+    outerStyle.position = 'absolute';
+    outerStyle.width = '100px';
+    outerStyle.height = '100px';
+    outerStyle.overflow = 'scroll';
+    outerStyle.top = '-99999px';
+    const scrollbarWidth = outer.offsetWidth - outer.clientWidth;
+    const scrollbarHeight = outer.offsetHeight - outer.clientHeight;
+    document.body.removeChild(outer);
+    return { scrollbarWidth, scrollbarHeight };
 }
 
 //  计算系统滚动条尺寸，宽高有可能不同
@@ -85,10 +85,10 @@ export default class Scrollbar extends Component {
             'handleDrag',
             'handleDragEnd',
         ].forEach(function (element) {
-                if (this[element]) {
-                    this[element] = this[element].bind(this);
-                }
-            }, this);
+            if (this[element]) {
+                this[element] = this[element].bind(this);
+            }
+        }, this);
     }
 
     componentDidMount() {
@@ -276,7 +276,7 @@ export default class Scrollbar extends Component {
     handleScroll(event) {
         const { onScroll, onScrollFrame } = this.props;
         if (onScroll) onScroll(event);
-        this.update(values => {
+        this.update((values) => {
             const { scrollLeft, scrollTop } = values;
             this.viewScrollLeft = scrollLeft;
             this.viewScrollTop = scrollTop;
@@ -645,22 +645,22 @@ Scrollbar.propTypes = {
     onScrollStart: PropTypes.func,
     onScrollStop: PropTypes.func,
     onUpdate: PropTypes.func,
-    tagName: PropTypes.string,
+    //tagName: PropTypes.string,
     thumbSize: PropTypes.number,
     thumbMinSize: PropTypes.number,
     hideTracksWhenNotNeeded: PropTypes.bool,
     autoHide: PropTypes.bool,
     autoHideTimeout: PropTypes.number,
     autoHideDuration: PropTypes.number,
-    autoHeight: PropTypes.bool, // TODO
-    autoHeightMin: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string
-    ]),
-    autoHeightMax: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string
-    ]),
+    //autoHeight: PropTypes.bool, // TODO
+    //autoHeightMin: PropTypes.oneOfType([
+    //    PropTypes.number,
+    //    PropTypes.string
+    //]),
+    //autoHeightMax: PropTypes.oneOfType([
+    //    PropTypes.number,
+    //    PropTypes.string
+    //]),
     children: PropTypes.node,
     className: PropTypes.string,
 };
