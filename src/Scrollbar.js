@@ -2,10 +2,19 @@ import React, { Component, PropTypes } from 'react';
 import css from 'dom-css';
 import './scrollbar.css';
 import { getInnerHeight, getInnerWidth, addListener, removeListener } from './util';
-
-function returnFalse() {
-    return false;
-}
+// import {
+//     // containerStyleDefault,
+//     // containerStyleAutoHeight,
+//     // viewStyleAutoHeight,
+//     // viewStyleUniversalInitial,
+//     // viewStyleDefault,
+//     // trackHorizontalStyleDefault,
+//     // trackVerticalStyleDefault,
+//     // thumbHorizontalStyleDefault,
+//     // thumbVerticalStyleDefault,
+//     disableSelectStyle,
+//     disableSelectStyleReset
+// } from './defaultStyle';
 
 const disableSelectStyle = {
     userSelect: 'none'
@@ -14,6 +23,11 @@ const disableSelectStyle = {
 const disableSelectStyleReset = {
     userSelect: ''
 };
+
+function returnFalse() {
+    return false;
+}
+
 
 function getScrollbarSize() {
     const outer = document.createElement('div');
@@ -66,7 +80,6 @@ function _prefixStyle(style) {
 
 const transform = _prefixStyle('transform');
 const hasTransform = transform !== false;
-
 
 export default class Scrollbar extends Component {
     constructor(props) {
@@ -678,9 +691,9 @@ Scrollbar.defaultProps = {
     autoHide: false,
     autoHideTimeout: 1000,
     autoHideDuration: 200,
-    autoHeight: false,
-    autoHeightMin: 0,
-    autoHeightMax: 200,
+    // autoHeight: false,
+    // autoHeightMin: 0,
+    // autoHeightMax: 200,
     universal: false,
     style: null,
 };

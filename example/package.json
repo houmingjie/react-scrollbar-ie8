@@ -1,17 +1,12 @@
 {
-  "name": "react-scrollbar-ie8",
-  "version": "0.0.9",
-  "description": "react scrollbar component compat IE8",
-  "main": "./lib/index.js",
+  "name": "react-scrollbar-ie8-example",
+  "version": "0.1.0",
+  "description": "example",
+  "main": "server.js",
   "scripts": {
-    "lint": "eslint src",
-    "build": "webpack",
-    "prepublish": "cross-env NODE_ENV=production webpack"
+    "start": "node server.js",
+    "build": "webpack"
   },
-  "files": [
-    "lib",
-    "src"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/houmingjie/react-scrollbar-ie8.git"
@@ -28,8 +23,16 @@
     "url": "https://github.com/houmingjie/react-scrollbar-ie8/issues"
   },
   "homepage": "https://github.com/houmingjie/react-scrollbar-ie8#readme",
+  "babel": {
+    "presets": [
+      "es2015",
+      "react",
+      "stage-0"
+    ]
+  },
   "dependencies": {
-    "dom-css": "^2.1.0"
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
@@ -60,9 +63,5 @@
     "style-loader": "^0.16.0",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.1"
-  },
-  "peerDependencies": {
-    "react": "^0.14.3",
-    "react-dom": "^0.14.3"
   }
 }
