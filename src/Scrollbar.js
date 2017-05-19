@@ -584,7 +584,7 @@ export default class Scrollbar extends Component {
     }
 
     render() {
-        const { autoHide, autoHideDuration, className } = this.props;
+        const { autoHide, autoHideDuration, className, onWheel, style } = this.props;
 
         let viewStyle = {};
         let trackHorizontalStyle = {};
@@ -608,7 +608,11 @@ export default class Scrollbar extends Component {
         }
 
         return (
-            <div className={`scrollbar-container  ${className || ''}`} ref="container">
+            <div
+                className={`scrollbar-container  ${className || ''}`}
+                ref="container"
+                onWheel={onWheel || null}
+                style={style}>
                 <div
                      className="scrollbar-view"
                      ref="view"
@@ -645,6 +649,7 @@ Scrollbar.propTypes = {
     onScrollStart: PropTypes.func,
     onScrollStop: PropTypes.func,
     onUpdate: PropTypes.func,
+    onWheel: PropTypes.func,
     //tagName: PropTypes.string,
     thumbSize: PropTypes.number,
     thumbMinSize: PropTypes.number,
@@ -662,6 +667,7 @@ Scrollbar.propTypes = {
     //    PropTypes.string
     //]),
     children: PropTypes.node,
+    style: PropTypes.object,
     className: PropTypes.string,
 };
 
@@ -676,4 +682,5 @@ Scrollbar.defaultProps = {
     autoHeightMin: 0,
     autoHeightMax: 200,
     universal: false,
+    style: null,
 };
