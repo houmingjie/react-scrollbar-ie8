@@ -24,10 +24,21 @@ const disableSelectStyleReset = {
     userSelect: ''
 };
 
+const containerStyleAutoHeight = {
+    height: 'auto'
+};
+
+const viewStyleAutoHeight = {
+    position: 'relative',
+    top: undefined,
+    left: undefined,
+    right: undefined,
+    bottom: undefined
+};
+
 function returnFalse() {
     return false;
 }
-
 
 function getScrollbarSize() {
     const outer = document.createElement('div');
@@ -44,7 +55,6 @@ function getScrollbarSize() {
     return { scrollbarWidth, scrollbarHeight };
 }
 
-//  计算系统滚动条尺寸，宽高有可能不同
 const { scrollbarWidth: systemScrollBarWidth, scrollbarHeight: systemScrollBarHeight } = getScrollbarSize();
 
 const rAF = window.requestAnimationFrame;
@@ -597,17 +607,49 @@ export default class Scrollbar extends Component {
     }
 
     render() {
-        const { autoHide, autoHideDuration, className, onWheel, style } = this.props;
+        const {
+            autoHide,
+            autoHideDuration,
+            className,
+            onWheel,
+            style,
+            trackStyle,
+            thumbStyle,
+            tagName,
+            autoHeight,
+            autoHeightMin,
+            autoHeightMax,
+            children
+        } = this.props;
+
+        let containerStyle = {
+            ...(autoHeight && {
+                ...containerStyleAutoHeight,
+                minHeight: autoHeightMin,
+                maxHeight: autoHeightMax
+            }),
+            ...style
+        }
 
         let viewStyle = {};
-        let trackHorizontalStyle = {};
-        // let thumbHorizontalStyle = {};
-        let trackVerticalStyle = {};
-        // let thumbVerticalStyle = {};
+        let trackHorizontalStyle = {...trackStyle};
+        let thumbHorizontalStyle = {...thumbStyle};
+        let trackVerticalStyle = {...trackStyle};
+        let thumbVerticalStyle = {...thumbStyle};
 
         viewStyle = {
-            marginRight: -systemScrollBarWidth,
-            marginBottom: -systemScrollBarHeight,
+            marginRight: -systemScrollBarWidth || 0,
+            marginBottom: -systemScrollBarHeight || 0,
+            ...(autoHeight && {
+                ...viewStyleAutoHeight,
+                // Add scrollbarWidth to autoHeight in order to compensate negative margins
+                minHeight: isString(autoHeightMin)
+                    ? `calc(${autoHeightMin} + ${systemScrollBarWidth}px)`
+                    : autoHeightMin + systemScrollBarWidth,
+                maxHeight: isString(autoHeightMax)
+                    ? `calc(${autoHeightMax} + ${systemScrollBarHeight}px)`
+                    : autoHeightMax + systemScrollBarHeight
+            }),
         };
 
         if (autoHide) {
@@ -615,23 +657,30 @@ export default class Scrollbar extends Component {
                 transition: `opacity ${autoHideDuration}ms`,
                 opacity: 0
             };
-            trackVerticalStyle = trackHorizontalStyle = {
+            trackVerticalStyle = {
+                ...trackVerticalStyle,
+                ...trackAutoHideStyle
+            }
+            trackHorizontalStyle = {
+                ...trackHorizontalStyle,
                 ...trackAutoHideStyle
             };
         }
 
+        const Tag = tagName;
+
         return (
-            <div
+            <Tag
                 className={`scrollbar-container  ${className || ''}`}
                 ref="container"
                 onWheel={onWheel || null}
-                style={style}>
+                style={containerStyle}>
                 <div
                      className="scrollbar-view"
                      ref="view"
                      style={viewStyle}
                     >
-                    {this.props.children}
+                    {children}
                 </div>
                 <div
                     className="scrollbar-track scrollbar-track-horizontal"
@@ -639,6 +688,7 @@ export default class Scrollbar extends Component {
                     ref="trackHorizontal">
                     <div
                         className="scrollbar-thumb scrollbar-thumb-horizontal"
+                        style={thumbHorizontalStyle}
                         ref="thumbHorizontal">
                     </div>
                 </div>
@@ -648,10 +698,11 @@ export default class Scrollbar extends Component {
                     ref="trackVertical">
                     <div
                         className="scrollbar-thumb scrollbar-thumb-vertical"
+                        style={thumbVerticalStyle}
                         ref="thumbVertical">
                     </div>
                 </div>
-            </div>
+            </Tag>
         );
     }
 }
@@ -663,24 +714,26 @@ Scrollbar.propTypes = {
     onScrollStop: PropTypes.func,
     onUpdate: PropTypes.func,
     onWheel: PropTypes.func,
-    //tagName: PropTypes.string,
+    tagName: PropTypes.string,
     thumbSize: PropTypes.number,
     thumbMinSize: PropTypes.number,
     hideTracksWhenNotNeeded: PropTypes.bool,
     autoHide: PropTypes.bool,
     autoHideTimeout: PropTypes.number,
     autoHideDuration: PropTypes.number,
-    //autoHeight: PropTypes.bool, // TODO
-    //autoHeightMin: PropTypes.oneOfType([
-    //    PropTypes.number,
-    //    PropTypes.string
-    //]),
-    //autoHeightMax: PropTypes.oneOfType([
-    //    PropTypes.number,
-    //    PropTypes.string
-    //]),
+    autoHeight: PropTypes.bool,
+    autoHeightMin: PropTypes.oneOfType([
+       PropTypes.number,
+       PropTypes.string
+    ]),
+    autoHeightMax: PropTypes.oneOfType([
+       PropTypes.number,
+       PropTypes.string
+    ]),
     children: PropTypes.node,
     style: PropTypes.object,
+    trackStyle: PropTypes.object,
+    thumbStyle: PropTypes.object,
     className: PropTypes.string,
 };
 
@@ -691,9 +744,9 @@ Scrollbar.defaultProps = {
     autoHide: false,
     autoHideTimeout: 1000,
     autoHideDuration: 200,
-    // autoHeight: false,
-    // autoHeightMin: 0,
-    // autoHeightMax: 200,
+    autoHeight: false,
+    autoHeightMin: 0,
+    autoHeightMax: 200,
     universal: false,
     style: null,
 };

@@ -40,13 +40,6 @@ function getConfig() {
                     test: /\.js$/,
                     exclude: /node_modules/,
                     loaders: ['babel-loader'],
-                    include: __dirname
-                },
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    loaders: ['babel-loader'],
-                    include: path.join(__dirname, '..', 'src')
                 },
                 {
                     test: /\.(jpg|png|gif)$/,
@@ -62,13 +55,11 @@ function getConfig() {
         },
         resolve: {
             extension: ['', '.js'],
-            alias: {
-                'react-scrollbar-ie8': path.join(__dirname, '..', 'src')
-            },
             root: [
-                path.resolve('./src'),
+                path.resolve("./src"),
+                path.resolve("../src")
             ],
-            modulesDirectories: ['node_modules'],
+            modulesDirectories: ["node_modules"],
         },
         plugins,
         devtool: '#source-map',

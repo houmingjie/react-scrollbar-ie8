@@ -8,7 +8,6 @@ appWebpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
 const app = new WebpackDevServer(webpack(appWebpackConfig), {
     publicPath: appWebpackConfig.output.publicPath,
     hot: true,
-    watch: true,
     inline: true,
     historyApiFallback: false,
     stats: { colors: true },

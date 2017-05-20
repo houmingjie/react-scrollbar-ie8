@@ -1,6 +1,6 @@
 {
   "name": "react-scrollbar-ie8",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "react scrollbar component compat IE8",
   "main": "./lib/index.js",
   "scripts": {
@@ -36,7 +36,6 @@
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.0",
     "babel-plugin-add-module-exports": "^0.1.2",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.3.13",

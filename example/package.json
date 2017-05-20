@@ -28,11 +28,12 @@
       "es2015",
       "react",
       "stage-0"
+    ],
+    "plugins": [
+      "add-module-exports"
     ]
   },
   "dependencies": {
-    "react": "^0.14.3",
-    "react-dom": "^0.14.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
