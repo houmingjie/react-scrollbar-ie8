@@ -140,7 +140,7 @@ export default class Scrollbar extends Component {
         const { view, trackHorizontal } = this.refs;
         const { scrollWidth, clientWidth } = view;
         const trackWidth = getInnerWidth(trackHorizontal);
-        const width = Math.ceil(clientWidth / scrollWidth * trackWidth);
+        const width = Math.ceil(clientWidth / scrollWidth * trackWidth) || 0;
         if (trackWidth === width) return 0;
         if (thumbSize) return thumbSize;
         return Math.max(width, thumbMinSize);
@@ -185,7 +185,7 @@ export default class Scrollbar extends Component {
         const { scrollWidth, clientWidth } = view;
         const trackWidth = getInnerWidth(trackHorizontal);
         const thumbWidth = this.getThumbHorizontalWidth();
-        return offset / (trackWidth - thumbWidth) * (scrollWidth - clientWidth);
+        return (offset / (trackWidth - thumbWidth) || 0)  * (scrollWidth - clientWidth);
     }
 
     getScrollTopForOffset(offset) {
@@ -193,7 +193,7 @@ export default class Scrollbar extends Component {
         const { scrollHeight, clientHeight } = view;
         const trackHeight = getInnerHeight(trackVertical);
         const thumbHeight = this.getThumbVerticalHeight();
-        return offset / (trackHeight - thumbHeight) * (scrollHeight - clientHeight);
+        return (offset / (trackHeight - thumbHeight) || 0 ) * (scrollHeight - clientHeight);
     }
 
     getScrollLeft() {
