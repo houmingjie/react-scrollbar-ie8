@@ -52,6 +52,14 @@ function getScrollbarSize() {
     const scrollbarWidth = outer.offsetWidth - outer.clientWidth;
     const scrollbarHeight = outer.offsetHeight - outer.clientHeight;
     document.body.removeChild(outer);
+    if(!scrollbarWidth){
+        scrollbarWidth = 17;
+    }
+
+    if(!scrollbarHeight){
+        scrollbarHeight = 17;
+    }
+
     return { scrollbarWidth, scrollbarHeight };
 }
 
