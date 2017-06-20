@@ -49,8 +49,8 @@ function getScrollbarSize() {
     outerStyle.height = '100px';
     outerStyle.overflow = 'scroll';
     outerStyle.top = '-99999px';
-    const scrollbarWidth = outer.offsetWidth - outer.clientWidth;
-    const scrollbarHeight = outer.offsetHeight - outer.clientHeight;
+    let scrollbarWidth = outer.offsetWidth - outer.clientWidth;
+    let scrollbarHeight = outer.offsetHeight - outer.clientHeight;
     document.body.removeChild(outer);
     if(!scrollbarWidth){
         scrollbarWidth = 17;
@@ -104,6 +104,7 @@ export default class Scrollbar extends Component {
         super(props);
         [
             'handleScroll',
+            'handleMousewheel',
             'handleViewMouseEnter',
             'handleViewMouseLeave',
             'handleTrackMouseEnter',
@@ -302,6 +303,25 @@ export default class Scrollbar extends Component {
         removeListener(window, 'resize', this.handleWindowResize);
 
         this.teardownDragging();
+    }
+
+    handleMousewheel(event){
+        const { onWheel, mouserwheelAlone } = this.props;
+        if (onWheel) onScroll(event);
+
+        if(mouserwheelAlone){
+            const values = this.getViewValue();
+            const {scrollTop,scrollHeight,clientHeight} = values;
+            if(scrollTop == 0){
+                if(event.deltaY<0){
+                    event.preventDefault();
+                }
+            }else if(scrollTop == (scrollHeight-clientHeight)){
+                if(event.deltaY>0){
+                    event.preventDefault();
+                }
+            }
+        }
     }
 
     handleScroll(event) {
@@ -681,7 +701,7 @@ export default class Scrollbar extends Component {
             <Tag
                 className={`scrollbar-container  ${className || ''}`}
                 ref="container"
-                onWheel={onWheel || null}
+                onWheel={this.handleMousewheel}
                 style={containerStyle}>
                 <div
                      className="scrollbar-view"
@@ -716,6 +736,7 @@ export default class Scrollbar extends Component {
 }
 
 Scrollbar.propTypes = {
+    mouserwheelAlone:PropTypes.bool,//set true when scroll to top or bottom prevent parent scroll
     onScroll: PropTypes.func,
     onScrollFrame: PropTypes.func,
     onScrollStart: PropTypes.func,
@@ -757,4 +778,5 @@ Scrollbar.defaultProps = {
     autoHeightMax: 200,
     universal: false,
     style: null,
+    mouserwheelAlone:true,
 };

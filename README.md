@@ -1,6 +1,5 @@
 react-scrollbar-ie8
 =========================
-# v1.0.0 is now available
 
 [![npm](https://img.shields.io/badge/npm-react--scrollbar--ie8-brightgreen.svg?style=flat-square)]()
 [![npm version](https://img.shields.io/npm/v/react-scrollbar-ie8.svg?style=flat-square)](https://www.npmjs.com/package/react-scrollbar-ie8)
