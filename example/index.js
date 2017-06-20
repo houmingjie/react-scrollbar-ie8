@@ -7,7 +7,7 @@ render(
     style={
         {
             width: '100%',
-            height:300,
+            height:600,
             background:"#438bca"
         }
     }
@@ -24,11 +24,35 @@ render(
     }
   >
       <div style={{
-          height: 1000
+          height: 2000,
+          padding:20
       }}>
-          <p>
-
-          </p>
+        <Scrollbar 
+            style={
+                {
+                    width: '100%',
+                    height:300,
+                    background:"#141"
+                }
+            }
+            thumbStyle={
+                {   
+                    background:"#bbb"
+                }
+            }
+            trackStyle={
+                {
+                    background:"#eee",
+                    width:8
+                }
+            }
+        >
+            <div style={{
+                height: 1000
+            }}>
+                
+            </div>
+        </Scrollbar>
       </div>
   </Scrollbar>,
   document.getElementById('app')
