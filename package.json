@@ -1,6 +1,6 @@
 {
   "name": "react-scrollbar-ie8",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "react scrollbar component compat IE8",
   "main": "./lib/index.js",
   "scripts": {
