@@ -18,3 +18,7 @@ react-scrollbar-ie8
 * `onWheel` event for further control.
 
 * `thumbStyle` & `trackStyle` prop is available to change the default style in js.  Besides you can also change the .scrollbar-track & .scrollbar-thumb in css.
+
+## todo
+* Optional use original scrollbar for Mac cause it's better than that.
+* More smooth impl to prevent cascade scroll.

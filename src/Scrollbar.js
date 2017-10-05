@@ -52,11 +52,9 @@ function getScrollbarSize() {
     let scrollbarWidth = outer.offsetWidth - outer.clientWidth;
     let scrollbarHeight = outer.offsetHeight - outer.clientHeight;
     document.body.removeChild(outer);
-    if(!scrollbarWidth){
-        scrollbarWidth = 17;
-    }
 
-    if(!scrollbarHeight){
+    if((!scrollbarWidth)&&(window.navigator.platform.indexOf("Mac")<0)){
+        scrollbarWidth = 17;
         scrollbarHeight = 17;
     }
 
