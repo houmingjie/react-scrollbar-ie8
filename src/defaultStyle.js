@@ -26,11 +26,9 @@ const trackStyleDefault = {
 
 export const trackVerticalStyleDefault = {
     ...trackStyleDefault,
-    width: 6
 };
 
 export const trackHorizontalStyleDefault = {
-    height: 6
 };
 
 export const thumbStyleDefault = {

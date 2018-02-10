@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Scrollbar from 'Scrollbar';
+import Scrollbar from '../src/index';
 
 render(
   <Scrollbar 
@@ -19,7 +19,6 @@ render(
     trackStyle={
         {
             background:"#eee",
-            width:8
         }
     }
   >
@@ -32,7 +31,7 @@ render(
                 {
                     width: '100%',
                     height:300,
-                    background:"#141"
+                    background:"#3ffb3f"
                 }
             }
             thumbStyle={
@@ -43,7 +42,6 @@ render(
             trackStyle={
                 {
                     background:"#eee",
-                    width:8
                 }
             }
         >

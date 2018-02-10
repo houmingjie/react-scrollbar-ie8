@@ -14,3 +14,5 @@ const app = new WebpackDevServer(webpack(appWebpackConfig), {
     disableHostCheck: true,
 });
 app.listen(8001);
+
+console.info('server started at 8001');

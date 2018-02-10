@@ -63,6 +63,7 @@ function getScrollbarSize() {
 
 const { scrollbarWidth: systemScrollBarWidth, scrollbarHeight: systemScrollBarHeight } = getScrollbarSize();
 
+
 const rAF = window.requestAnimationFrame;
 const cAF = window.cancelAnimationFrame;
 
@@ -688,7 +689,7 @@ export default class Scrollbar extends Component {
             trackVerticalStyle = {
                 ...trackVerticalStyle,
                 ...trackAutoHideStyle
-            }
+            };
             trackHorizontalStyle = {
                 ...trackHorizontalStyle,
                 ...trackAutoHideStyle
