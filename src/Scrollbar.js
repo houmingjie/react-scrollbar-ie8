@@ -1,20 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import css from 'dom-css';
 import './scrollbar.css';
-import { getInnerHeight, getInnerWidth, addListener, removeListener } from './util';
-// import {
-//     // containerStyleDefault,
-//     // containerStyleAutoHeight,
-//     // viewStyleAutoHeight,
-//     // viewStyleUniversalInitial,
-//     // viewStyleDefault,
-//     // trackHorizontalStyleDefault,
-//     // trackVerticalStyleDefault,
-//     // thumbHorizontalStyleDefault,
-//     // thumbVerticalStyleDefault,
-//     disableSelectStyle,
-//     disableSelectStyleReset
-// } from './defaultStyle';
+import {getInnerHeight, getInnerWidth, addListener, removeListener} from './util';
 
 const disableSelectStyle = {
     userSelect: 'none'
@@ -53,15 +40,15 @@ function getScrollbarSize() {
     let scrollbarHeight = outer.offsetHeight - outer.clientHeight;
     document.body.removeChild(outer);
 
-    if((!scrollbarWidth)&&(window.navigator.platform.indexOf("Mac")<0)){
+    if ((!scrollbarWidth) && (window.navigator.platform.indexOf("Mac") < 0)) {
         scrollbarWidth = 17;
         scrollbarHeight = 17;
     }
 
-    return { scrollbarWidth, scrollbarHeight };
+    return {scrollbarWidth, scrollbarHeight};
 }
 
-const { scrollbarWidth: systemScrollBarWidth, scrollbarHeight: systemScrollBarHeight } = getScrollbarSize();
+const {scrollbarWidth: systemScrollBarWidth, scrollbarHeight: systemScrollBarHeight} = getScrollbarSize();
 
 
 const rAF = window.requestAnimationFrame;
@@ -99,6 +86,54 @@ const transform = _prefixStyle('transform');
 const hasTransform = transform !== false;
 
 export default class Scrollbar extends Component {
+
+    static propTypes = {
+        mouserwheelAlone: PropTypes.bool,//set true when scroll to top or bottom prevent parent scroll
+        onScroll: PropTypes.func,
+        onScrollFrame: PropTypes.func,
+        onScrollStart: PropTypes.func,
+        onScrollStop: PropTypes.func,
+        onUpdate: PropTypes.func,
+        onWheel: PropTypes.func,
+        tagName: PropTypes.string,
+        thumbSize: PropTypes.number,
+        thumbMinSize: PropTypes.number,
+        hideTracksWhenNotNeeded: PropTypes.bool,
+        autoHide: PropTypes.bool,
+        autoHideTimeout: PropTypes.number,
+        autoHideDuration: PropTypes.number,
+        autoHeight: PropTypes.bool,
+        autoHeightMin: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.string
+        ]),
+        autoHeightMax: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.string
+        ]),
+        children: PropTypes.node,
+        style: PropTypes.object,
+        trackStyle: PropTypes.object,
+        thumbStyle: PropTypes.object,
+        className: PropTypes.string,
+    };
+
+
+    static defaultProps = {
+        tagName: 'div',
+        thumbMinSize: 30,
+        hideTracksWhenNotNeeded: true,
+        autoHide: true,
+        autoHideTimeout: 1000,
+        autoHideDuration: 200,
+        autoHeight: false,
+        autoHeightMin: 0,
+        autoHeightMax: 200,
+        universal: false,
+        style: null,
+        mouserwheelAlone: false,
+    };
+
     constructor(props) {
         super(props);
         [
@@ -139,14 +174,14 @@ export default class Scrollbar extends Component {
     }
 
     getContainer() {
-        const { container } = this.refs;
+        const {container} = this.refs;
         return container;
     }
 
     getThumbHorizontalWidth() {
-        const { thumbSize, thumbMinSize } = this.props;
-        const { view, trackHorizontal } = this.refs;
-        const { scrollWidth, clientWidth } = view;
+        const {thumbSize, thumbMinSize} = this.props;
+        const {view, trackHorizontal} = this.refs;
+        const {scrollWidth, clientWidth} = view;
         const trackWidth = getInnerWidth(trackHorizontal);
         const width = Math.ceil(clientWidth / scrollWidth * trackWidth) || 0;
         if (trackWidth === width) return 0;
@@ -155,9 +190,9 @@ export default class Scrollbar extends Component {
     }
 
     getThumbVerticalHeight() {
-        const { thumbSize, thumbMinSize } = this.props;
-        const { view, trackVertical } = this.refs;
-        const { scrollHeight, clientHeight } = view;
+        const {thumbSize, thumbMinSize} = this.props;
+        const {view, trackVertical} = this.refs;
+        const {scrollHeight, clientHeight} = view;
         const trackHeight = getInnerHeight(trackVertical);
         const height = Math.ceil(clientHeight / scrollHeight * trackHeight) || 0;
         if (trackHeight === height) return 0;
@@ -166,7 +201,7 @@ export default class Scrollbar extends Component {
     }
 
     getViewValue() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         const {
             scrollLeft,
             scrollTop,
@@ -174,7 +209,7 @@ export default class Scrollbar extends Component {
             scrollHeight,
             clientWidth,
             clientHeight
-            } = view;
+        } = view;
 
         return {
             left: (scrollLeft / (scrollWidth - clientWidth)) || 0,
@@ -189,83 +224,83 @@ export default class Scrollbar extends Component {
     }
 
     getScrollLeftForOffset(offset) {
-        const { view, trackHorizontal } = this.refs;
-        const { scrollWidth, clientWidth } = view;
+        const {view, trackHorizontal} = this.refs;
+        const {scrollWidth, clientWidth} = view;
         const trackWidth = getInnerWidth(trackHorizontal);
         const thumbWidth = this.getThumbHorizontalWidth();
-        return (offset / (trackWidth - thumbWidth) || 0)  * (scrollWidth - clientWidth);
+        return (offset / (trackWidth - thumbWidth) || 0) * (scrollWidth - clientWidth);
     }
 
     getScrollTopForOffset(offset) {
-        const { view, trackVertical } = this.refs;
-        const { scrollHeight, clientHeight } = view;
+        const {view, trackVertical} = this.refs;
+        const {scrollHeight, clientHeight} = view;
         const trackHeight = getInnerHeight(trackVertical);
         const thumbHeight = this.getThumbVerticalHeight();
         return (offset / (trackHeight - thumbHeight) || 0 ) * (scrollHeight - clientHeight);
     }
 
     getScrollLeft() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         return view.scrollLeft;
     }
 
     getScrollTop() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         return view.scrollTop;
     }
 
     getScrollWidth() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         return view.scrollWidth;
     }
 
     getScrollHeight() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         return view.scrollHeight;
     }
 
     getClientWidth() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         return view.clientWidth;
     }
 
     getClientHeight() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         return view.clientHeight;
     }
 
     scrollLeft(left = 0) {
-        const { view } = this.refs;
+        const {view} = this.refs;
         view.scrollLeft = left;
     }
 
     scrollTop(top = 0) {
-        const { view } = this.refs;
+        const {view} = this.refs;
         view.scrollTop = top;
     }
 
     scrollToLeft() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         view.scrollLeft = 0;
     }
 
     scrollToTop() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         view.scrollTop = 0;
     }
 
     scrollToRight() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         view.scrollLeft = view.scrollWidth;
     }
 
     scrollToBottom() {
-        const { view } = this.refs;
+        const {view} = this.refs;
         view.scrollTop = view.scrollHeight;
     }
 
     addEventListener() {
-        const { view, trackHorizontal, trackVertical, thumbHorizontal, thumbVertical } = this.refs;
+        const {view, trackHorizontal, trackVertical, thumbHorizontal, thumbVertical} = this.refs;
         addListener(view, 'scroll', this.handleScroll);
         addListener(view, 'mouseenter', this.handleViewMouseEnter);
         addListener(view, 'mouseleave', this.handleViewMouseLeave);
@@ -285,7 +320,7 @@ export default class Scrollbar extends Component {
     }
 
     removeEventListener() {
-        const { view, trackHorizontal, trackVertical, thumbHorizontal } = this.refs;
+        const {view, trackHorizontal, trackVertical, thumbHorizontal} = this.refs;
         removeListener(view, 'scroll', this.handleScroll);
 
         removeListener(trackHorizontal, 'mouseenter', this.handleTrackMouseEnter);
@@ -304,20 +339,20 @@ export default class Scrollbar extends Component {
         this.teardownDragging();
     }
 
-    handleMousewheel(event){
-        const { onWheel, mouserwheelAlone } = this.props;
-        const { view } = this.refs;
+    handleMousewheel(event) {
+        const {onWheel, mouserwheelAlone} = this.props;
+        const {view} = this.refs;
         if (onWheel) onScroll(event);
 
-        if(mouserwheelAlone){
+        if (mouserwheelAlone) {
             const values = this.getViewValue();
-            const {scrollTop,scrollHeight,clientHeight} = values;
+            const {scrollTop, scrollHeight, clientHeight} = values;
 
-            const delta = -event.deltaY;        
+            const delta = -event.deltaY;
             // 向上滚 || 向下滚
             if ((delta > 0 && scrollTop <= delta) || (delta < 0 && scrollHeight - clientHeight - scrollTop <= -1 * delta)) {
                 // IE浏览器下滚动会跨越边界直接影响父级滚动，因此，临界时候手动边界滚动定位
-                view.scrollTop = delta > 0? 0: scrollHeight;
+                view.scrollTop = delta > 0 ? 0 : scrollHeight;
                 event.preventDefault();
             }
         }
@@ -326,10 +361,10 @@ export default class Scrollbar extends Component {
     }
 
     handleScroll(event) {
-        const { onScroll, onScrollFrame } = this.props;
+        const {onScroll, onScrollFrame} = this.props;
         if (onScroll) onScroll(event);
         this.update((values) => {
-            const { scrollLeft, scrollTop } = values;
+            const {scrollLeft, scrollTop} = values;
             this.viewScrollLeft = scrollLeft;
             this.viewScrollTop = scrollTop;
             if (onScrollFrame) onScrollFrame(values);
@@ -338,37 +373,37 @@ export default class Scrollbar extends Component {
     }
 
     handleViewMouseEnter() {
-        const { autoHide } = this.props;
+        const {autoHide} = this.props;
         if (!autoHide) return;
         this.showTracks();
     }
 
     handleViewMouseLeave() {
-        const { autoHide } = this.props;
+        const {autoHide} = this.props;
         if (!autoHide) return;
         this.hideTracks();
     }
 
     handleScrollStart() {
-        const { onScrollStart } = this.props;
+        const {onScrollStart} = this.props;
         if (onScrollStart) onScrollStart();
         this.handleScrollStartAutoHide();
     }
 
     handleScrollStartAutoHide() {
-        const { autoHide } = this.props;
+        const {autoHide} = this.props;
         if (!autoHide) return;
         this.showTracks();
     }
 
     handleScrollStop() {
-        const { onScrollStop } = this.props;
+        const {onScrollStop} = this.props;
         if (onScrollStop) onScrollStop();
         this.handleScrollStopAutoHide();
     }
 
     handleScrollStopAutoHide() {
-        const { autoHide } = this.props;
+        const {autoHide} = this.props;
         if (!autoHide) return;
         this.hideTracks();
     }
@@ -387,9 +422,9 @@ export default class Scrollbar extends Component {
             event.returnValue = false;
         }
 
-        const { view, trackHorizontal } = this.refs;
-        const { clientX } = event;
-        const { left: targetLeft } = trackHorizontal.getBoundingClientRect();
+        const {view, trackHorizontal} = this.refs;
+        const {clientX} = event;
+        const {left: targetLeft} = trackHorizontal.getBoundingClientRect();
         const thumbWidth = this.getThumbHorizontalWidth();
         const offset = Math.abs(targetLeft - clientX) - thumbWidth / 2;
         view.scrollLeft = this.getScrollLeftForOffset(offset);
@@ -401,9 +436,9 @@ export default class Scrollbar extends Component {
         } else {
             event.returnValue = false;
         }
-        const { view, trackVertical } = this.refs;
-        const { clientY } = event;
-        const { top: targetTop } = trackVertical.getBoundingClientRect();
+        const {view, trackVertical} = this.refs;
+        const {clientY} = event;
+        const {top: targetTop} = trackVertical.getBoundingClientRect();
         const thumbHeight = this.getThumbVerticalHeight();
         const offset = Math.abs(targetTop - clientY) - thumbHeight / 2;
         view.scrollTop = this.getScrollTopForOffset(offset);
@@ -418,10 +453,10 @@ export default class Scrollbar extends Component {
             event.cancelBabble = true;
         }
         this.handleDragStart(event);
-        const { clientX } = event;
-        const { thumbHorizontal } = this.refs;
-        const { offsetWidth } = thumbHorizontal;
-        const { left } = thumbHorizontal.getBoundingClientRect();
+        const {clientX} = event;
+        const {thumbHorizontal} = this.refs;
+        const {offsetWidth} = thumbHorizontal;
+        const {left} = thumbHorizontal.getBoundingClientRect();
         this.prevPageX = offsetWidth - (clientX - left);
         return false;
     }
@@ -435,10 +470,10 @@ export default class Scrollbar extends Component {
             event.cancelBabble = true;
         }
         this.handleDragStart(event);
-        const { clientY } = event;
-        const { thumbVertical } = this.refs;
-        const { offsetHeight } = thumbVertical;
-        const { top } = thumbVertical.getBoundingClientRect();
+        const {clientY} = event;
+        const {thumbVertical} = this.refs;
+        const {offsetHeight} = thumbVertical;
+        const {top} = thumbVertical.getBoundingClientRect();
         this.prevPageY = offsetHeight - (clientY - top);
         return false;
     }
@@ -479,18 +514,18 @@ export default class Scrollbar extends Component {
 
     handleDrag(event) {
         if (this.prevPageX) {
-            const { clientX } = event;
-            const { view, trackHorizontal } = this.refs;
-            const { left: trackLeft } = trackHorizontal.getBoundingClientRect();
+            const {clientX} = event;
+            const {view, trackHorizontal} = this.refs;
+            const {left: trackLeft} = trackHorizontal.getBoundingClientRect();
             const thumbWidth = this.getThumbHorizontalWidth();
             const clickPosition = thumbWidth - this.prevPageX;
             const offset = -trackLeft + clientX - clickPosition;
             view.scrollLeft = this.getScrollLeftForOffset(offset);
         }
         if (this.prevPageY) {
-            const { clientY } = event;
-            const { view, trackVertical } = this.refs;
-            const { top: trackTop } = trackVertical.getBoundingClientRect();
+            const {clientY} = event;
+            const {view, trackVertical} = this.refs;
+            const {top: trackTop} = trackVertical.getBoundingClientRect();
             const thumbHeight = this.getThumbVerticalHeight();
             const clickPosition = thumbHeight - this.prevPageY;
             const offset = -trackTop + clientY - clickPosition;
@@ -507,7 +542,7 @@ export default class Scrollbar extends Component {
     }
 
     handleDragEndAutoHide() {
-        const { autoHide } = this.props;
+        const {autoHide} = this.props;
         if (!autoHide) return;
         this.hideTracks();
     }
@@ -518,7 +553,7 @@ export default class Scrollbar extends Component {
     }
 
     handleTrackMouseEnterAutoHide() {
-        const { autoHide } = this.props;
+        const {autoHide} = this.props;
         if (!autoHide) return;
         this.showTracks();
     }
@@ -529,28 +564,28 @@ export default class Scrollbar extends Component {
     }
 
     handleTrackMouseLeaveAutoHide() {
-        const { autoHide } = this.props;
+        const {autoHide} = this.props;
         if (!autoHide) return;
         this.hideTracks();
     }
 
     showTracks() {
-        const { trackHorizontal, trackVertical } = this.refs;
+        const {trackHorizontal, trackVertical} = this.refs;
         clearTimeout(this.hideTracksTimeout);
-        css(trackHorizontal, { opacity: 1 });
-        css(trackVertical, { opacity: 1 });
+        css(trackHorizontal, {opacity: 1});
+        css(trackVertical, {opacity: 1});
     }
 
     hideTracks() {
         if (this.dragging) return;
         if (this.scrolling) return;
         if (this.trackMouseOver) return;
-        const { autoHideTimeout } = this.props;
-        const { trackHorizontal, trackVertical } = this.refs;
+        const {autoHideTimeout} = this.props;
+        const {trackHorizontal, trackVertical} = this.refs;
         clearTimeout(this.hideTracksTimeout);
         this.hideTracksTimeout = setTimeout(() => {
-            css(trackHorizontal, { opacity: 0 });
-            css(trackVertical, { opacity: 0 });
+            css(trackHorizontal, {opacity: 0});
+            css(trackVertical, {opacity: 0});
         }, autoHideTimeout);
     }
 
@@ -585,10 +620,10 @@ export default class Scrollbar extends Component {
     }
 
     _update(callback) {
-        const { onUpdate, hideTracksWhenNotNeeded } = this.props;
+        const {onUpdate, hideTracksWhenNotNeeded} = this.props;
         const values = this.getViewValue();
-        const { thumbHorizontal, thumbVertical, trackHorizontal, trackVertical } = this.refs;
-        const { scrollLeft, clientWidth, scrollWidth } = values;
+        const {thumbHorizontal, thumbVertical, trackHorizontal, trackVertical} = this.refs;
+        const {scrollLeft, clientWidth, scrollWidth} = values;
         const trackHorizontalWidth = getInnerWidth(trackHorizontal);
         const thumbHorizontalWidth = this.getThumbHorizontalWidth();
         const thumbHorizontalX = (scrollLeft / (scrollWidth - clientWidth) * (trackHorizontalWidth - thumbHorizontalWidth)) || 0;
@@ -602,7 +637,7 @@ export default class Scrollbar extends Component {
             thumbHorizontalStyle.left = thumbHorizontalX;
         }
 
-        const { scrollTop, clientHeight, scrollHeight } = values;
+        const {scrollTop, clientHeight, scrollHeight} = values;
         const trackVerticalHeight = getInnerHeight(trackVertical);
         const thumbVerticalHeight = this.getThumbVerticalHeight();
         const thumbVerticalY = (scrollTop / (scrollHeight - clientHeight) * (trackVerticalHeight - thumbVerticalHeight)) || 0;
@@ -658,12 +693,18 @@ export default class Scrollbar extends Component {
                 maxHeight: autoHeightMax
             }),
             ...style
-        }
+        };
 
         let viewStyle = {};
         let trackHorizontalStyle = {...trackStyle};
+        if(!systemScrollBarWidth){
+            trackHorizontalStyle.display = none;
+        }
         let thumbHorizontalStyle = {...thumbStyle};
         let trackVerticalStyle = {...trackStyle};
+        if(!systemScrollBarHeight){
+            trackVerticalStyle.display = none;
+        }
         let thumbVerticalStyle = {...thumbStyle};
 
         viewStyle = {
@@ -705,10 +746,10 @@ export default class Scrollbar extends Component {
                 onWheel={this.handleMousewheel}
                 style={containerStyle}>
                 <div
-                     className="scrollbar-view"
-                     ref="view"
-                     style={viewStyle}
-                    >
+                    className="scrollbar-view"
+                    ref="view"
+                    style={viewStyle}
+                >
                     {children}
                 </div>
                 <div
@@ -735,49 +776,3 @@ export default class Scrollbar extends Component {
         );
     }
 }
-
-Scrollbar.propTypes = {
-    mouserwheelAlone:PropTypes.bool,//set true when scroll to top or bottom prevent parent scroll
-    onScroll: PropTypes.func,
-    onScrollFrame: PropTypes.func,
-    onScrollStart: PropTypes.func,
-    onScrollStop: PropTypes.func,
-    onUpdate: PropTypes.func,
-    onWheel: PropTypes.func,
-    tagName: PropTypes.string,
-    thumbSize: PropTypes.number,
-    thumbMinSize: PropTypes.number,
-    hideTracksWhenNotNeeded: PropTypes.bool,
-    autoHide: PropTypes.bool,
-    autoHideTimeout: PropTypes.number,
-    autoHideDuration: PropTypes.number,
-    autoHeight: PropTypes.bool,
-    autoHeightMin: PropTypes.oneOfType([
-       PropTypes.number,
-       PropTypes.string
-    ]),
-    autoHeightMax: PropTypes.oneOfType([
-       PropTypes.number,
-       PropTypes.string
-    ]),
-    children: PropTypes.node,
-    style: PropTypes.object,
-    trackStyle: PropTypes.object,
-    thumbStyle: PropTypes.object,
-    className: PropTypes.string,
-};
-
-Scrollbar.defaultProps = {
-    tagName: 'div',
-    thumbMinSize: 30,
-    hideTracksWhenNotNeeded: true,
-    autoHide: false,
-    autoHideTimeout: 1000,
-    autoHideDuration: 200,
-    autoHeight: false,
-    autoHeightMin: 0,
-    autoHeightMax: 200,
-    universal: false,
-    style: null,
-    mouserwheelAlone:true,
-};
